@@ -284,7 +284,7 @@ class _LoungeDetailBlurryDialogState extends State<LoungeDetailBlurryDialog>
 
   @override
   void dispose() {
-    // TODO: implement dispose
+    
     loungeIsClosedContoller.dispose();
     super.dispose();
   }
