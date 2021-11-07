@@ -126,25 +126,7 @@ class _LoungeDetailState extends State<LoungeDetail> {
                           errorWidget: (context, url, error) =>
                               Icon(Icons.error),
                         ),
-                        //     Image.network(
-                        //   widget.loungePic.toString(),
-                        //   fit: BoxFit.cover,
-                        //   loadingBuilder: (BuildContext context, Widget child,
-                        //       ImageChunkEvent loadingProgress) {
-                        //     if (loadingProgress == null) return child;
-                        //     return Center(
-                        //       child: CircularProgressIndicator(
-                        //         backgroundColor: Colors.grey,
-                        //         valueColor:
-                        //             AlwaysStoppedAnimation<Color>(Colors.orange),
-                        //         value: loadingProgress.expectedTotalBytes != null
-                        //             ? loadingProgress.cumulativeBytesLoaded /
-                        //                 loadingProgress.expectedTotalBytes
-                        //             : null,
-                        //       ),
-                        //     );
-                        //   },
-                        // ),
+                      
                       )
                     : Center(
                         child: Icon(FontAwesomeIcons.utensils,

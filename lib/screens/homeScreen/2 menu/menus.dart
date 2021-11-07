@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:agelgil_user_end/models/Models.dart';
 import 'package:agelgil_user_end/models/cart.dart';
 import 'package:agelgil_user_end/screens/homeScreen/3%20cart/cart_screen.dart';
@@ -97,20 +99,20 @@ class _MenusState extends State<Menus> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    subscription = Connectivity()
-        .onConnectivityChanged
-        .listen((ConnectivityResult result) {
-      if (result == ConnectivityResult.mobile ||
-          result == ConnectivityResult.wifi) {
-        setState(() {
-          isInternetConnected = true;
-        });
-      } else {
-        setState(() {
-          isInternetConnected = false;
-        });
-      }
-    });
+    // subscription = Connectivity()
+    //     .onConnectivityChanged
+    //     .listen((ConnectivityResult result) {
+    //   if (result == ConnectivityResult.mobile ||
+    //       result == ConnectivityResult.wifi) {
+    //     setState(() {
+    //       isInternetConnected = true;
+    //     });
+    //   } else {
+    //     setState(() {
+    //       isInternetConnected = false;
+    //     });
+    //   }
+    // });
 
     addedToCardContoller = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 200))
@@ -144,8 +146,24 @@ class _MenusState extends State<Menus> with TickerProviderStateMixin {
     });
   }
 
+  internetConnection() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+          setState(() {
+          isInternetConnected = true;
+        });
+      }
+    } on SocketException catch (_) {
+       setState(() {
+        isInternetConnected = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    internetConnection();
     double screenWidth = MediaQuery.of(context).size.width;
     paddingWidth = MediaQuery.of(context).size.width - (155);
     n = widget.categoryItems.length.toDouble();
@@ -630,7 +648,7 @@ class _MenusState extends State<Menus> with TickerProviderStateMixin {
                         userUid: widget.userUid,
                         userName: widget.userName,
                         userPhone: widget.userPhone,
-                        userSex:widget.userSex,
+                        userSex: widget.userSex,
                         userPic: widget.userPic,
                         cart: cart,
                         loungeName: widget.loungeName,

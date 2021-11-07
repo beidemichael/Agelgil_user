@@ -440,31 +440,6 @@ class _MapsContainerState extends State<MapsContainer> {
   }
 
   loungeDetailActivator(BuildContext context) {
-//  Navigator.push(
-//               context,
-//               MaterialPageRoute(
-//                 builder: (_) => StreamProvider<List<Orders>>.value(
-//                     value: DatabaseService(userUid: widget.userUid).orders,
-//                     child: MyOrdersScreen()),
-//               ));
-
-    // LoungeDetailBlurryDialog alert = LoungeDetailBlurryDialog(
-    //     widget.userName,
-    //     widget.userPic,
-    //     widget.userUid,
-    //     widget.userPhone,
-    //     categoryList,
-    //     categoryItems,
-    //     distance,
-    //     loungeId,
-    //     loungeName,
-    //     loungePic,
-    //     widget.orderConfirmed,
-    //     loungeLatitude,
-    //     loungeLongitude,
-    //     widget.controllerDeliveryFee,
-    //     widget.controllerServiceCharge,
-    //     isOpen);
 
     showDialog(
       context: context,
