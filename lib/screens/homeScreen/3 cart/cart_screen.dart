@@ -421,7 +421,9 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
                     subTotal: total(),
                     totalPrice: double.parse(
                         ((total() * (serviceCharge)) + total())
-                            .toStringAsFixed(1)),
+                            .toStringAsFixed(1))
+                        .round()
+                        .toDouble(),
                     userName: widget.userName,
                     userPhone: widget.userPhone,
                     userSex: widget.userSex,
@@ -430,7 +432,7 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
                     loungeId: widget.loungeId,
                     orderConfirmed: widget.orderConfirmed,
                     serviceCharge: double.parse(
-                        ((total() * (serviceCharge))).toStringAsFixed(1)),
+                        ((total() * (serviceCharge))).toStringAsFixed(1)).round().toDouble(),
                     loungeLatitude: widget.loungeLatitude,
                     loungeLongitude: widget.loungeLongitude,
                     controllerDeliveryFee: widget.controllerDeliveryFee,

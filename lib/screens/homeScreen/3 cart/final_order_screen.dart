@@ -235,23 +235,26 @@ class _FinalOrderScreenState extends State<FinalOrderScreen> {
                       Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 30.0, vertical: 5.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text('No Service charge if Subtotal is less than:',
-                                style: TextStyle(
-                                  fontSize: 12.0,
-                                  color: Colors.grey[400],
-                                )),
-                            Text(
-                                widget.controllerSFStartsAt.toString() +
-                                    '0 Birr',
-                                style: TextStyle(
-                                  fontSize: 12.0,
-                                  fontWeight: FontWeight.w400,
-                                  color: Colors.grey[400],
-                                )),
-                          ],
+                        child: Visibility(
+                          visible: widget.serviceCharge == 0,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Text('No Service charge if Subtotal is less than:',
+                                  style: TextStyle(
+                                    fontSize: 12.0,
+                                    color: Colors.grey[400],
+                                  )),
+                              Text(
+                                  widget.controllerSFStartsAt.toString() +
+                                      '0 Birr',
+                                  style: TextStyle(
+                                    fontSize: 12.0,
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.grey[400],
+                                  )),
+                            ],
+                          ),
                         ),
                       ),
                       SizedBox(height: 10.0),
