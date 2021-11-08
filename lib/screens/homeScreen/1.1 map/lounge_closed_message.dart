@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 
 class LoungeClosedMessage extends StatefulWidget {
- 
+  int color;
+  double opacity;
   String foodName;
-  LoungeClosedMessage({this.foodName,});
+  LoungeClosedMessage({
+    this.foodName,
+    this.color,
+    this.opacity,
+  });
   @override
   _LoungeClosedMessageState createState() => _LoungeClosedMessageState();
 }
@@ -30,7 +35,7 @@ class _LoungeClosedMessageState extends State<LoungeClosedMessage> {
         ),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(30),
-            color: Colors.grey[300].withOpacity(0.5)),
+            color: Colors.grey[widget.color].withOpacity(widget.opacity)),
       ),
     );
   }

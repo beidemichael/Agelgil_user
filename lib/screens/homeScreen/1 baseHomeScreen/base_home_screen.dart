@@ -1,3 +1,4 @@
+//base homw screen
 import 'dart:async';
 import 'dart:math';
 import 'package:agelgil_user_end/models/Models.dart';
@@ -5,6 +6,7 @@ import 'package:agelgil_user_end/models/cart.dart';
 import 'package:agelgil_user_end/screens/homeScreen/1%20baseHomeScreen/pre_order_confirmed.dart';
 import 'package:agelgil_user_end/screens/homeScreen/1%20baseHomeScreen/set_name/forced_name.dart';
 import 'package:agelgil_user_end/screens/homeScreen/1.1%20map/alertWindow/location_ask.dart';
+import 'package:agelgil_user_end/screens/homeScreen/1.1%20map/lounge_closed_message.dart';
 import 'package:agelgil_user_end/screens/homeScreen/1.1%20map/lounge_detail.dart';
 import 'package:agelgil_user_end/screens/homeScreen/1.1%20map/mapsContainer.dart';
 import 'package:agelgil_user_end/screens/homeScreen/1.2%20drawer/drawer_content.dart';
@@ -19,6 +21,7 @@ import 'package:agelgil_user_end/shared/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'lounge_listview/lounge_listview.dart';
 import 'update/forced_update.dart';
 
 class BaseHomeScreen extends StatefulWidget {
@@ -32,6 +35,8 @@ class _BaseHomeScreenState extends State<BaseHomeScreen>
     with TickerProviderStateMixin {
   AnimationController drawerContoller;
   Animation drawerAnimation;
+  AnimationController loungeIsClosedContoller;
+  Animation loungeIsClosedAnimation;
   String userUid = '';
   String userName = '';
   String userSex = '';
@@ -62,6 +67,7 @@ class _BaseHomeScreenState extends State<BaseHomeScreen>
   double loungeLatitude = 0;
   bool eatThere = false;
   bool isOpen = false;
+
 /////
   int netVersion;
   /////////////////////////// App version
@@ -78,6 +84,21 @@ class _BaseHomeScreenState extends State<BaseHomeScreen>
         setState(() {});
       });
     drawerAnimation = Tween<double>(begin: 0, end: 90).animate(drawerContoller);
+
+    loungeIsClosedContoller = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 200))
+      ..addListener(() {
+        setState(() {});
+      });
+    loungeIsClosedAnimation =
+        Tween<double>(begin: -70, end: 20).animate(loungeIsClosedContoller);
+  }
+
+  loungeIsClosed() {
+    loungeIsClosedContoller.forward();
+    Future.delayed(Duration(milliseconds: 1500), () {
+      loungeIsClosedContoller.reverse();
+    });
   }
 
   drawerState() {
@@ -206,262 +227,232 @@ class _BaseHomeScreenState extends State<BaseHomeScreen>
               ),
             ),
             backgroundColor: Colors.white,
-            body: ExpandableBottomSheet(
-              persistentHeader: Container(
-                height: 40,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(30.0),
-                      topRight: Radius.circular(30.0)),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey[400],
-                      blurRadius: 1.0, //effect of softening the shadow
-                      spreadRadius: 0.1, //effecet of extending the shadow
-                      offset: Offset(
-                          0.0, //horizontal
-                          -2.0 //vertical
-                          ),
-                    ),
-                  ],
-                ),
-                child: Center(
-                  child: Container(
-                    height: 8,
-                    width: 70,
+            body: Stack(
+              children: [
+                ExpandableBottomSheet(
+                  persistentHeader: Container(
+                    height: 40,
                     decoration: BoxDecoration(
-                      color: Colors.grey[300],
+                      color: Colors.white,
                       borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(30.0),
-                          topRight: Radius.circular(30.0),
-                          bottomLeft: Radius.circular(30.0),
-                          bottomRight: Radius.circular(30.0)),
+                          topRight: Radius.circular(30.0)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey[400],
+                          blurRadius: 1.0, //effect of softening the shadow
+                          spreadRadius: 0.1, //effecet of extending the shadow
+                          offset: Offset(
+                              0.0, //horizontal
+                              -2.0 //vertical
+                              ),
+                        ),
+                      ],
+                    ),
+                    child: Center(
+                      child: Container(
+                        height: 8,
+                        width: 70,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(30.0),
+                              topRight: Radius.circular(30.0),
+                              bottomLeft: Radius.circular(30.0),
+                              bottomRight: Radius.circular(30.0)),
+                        ),
+                      ),
+                    ),
+                  ),
+                  expandableContent: Container(
+                    height: MediaQuery.of(context).size.height * 0.7,
+                    color: Colors.white,
+                    child: loungess.isNotEmpty
+                        ? ListView.builder(
+                            itemCount: loungess.length,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding: const EdgeInsets.only(
+                                    top: 10.0, left: 20, right: 20),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      isOpen = loungess[index].weAreOpen;
+                                      categoryItems = loungess[index].category;
+                                      categoryList =
+                                          loungess[index].category.length;
+                                      loungeName = loungess[index].name;
+                                      loungeId = loungess[index].id;
+                                      loungePic = loungess[index].images;
+                                      loungeLatitude = loungess[index].latitude;
+                                      eatThere = lounges[index].eatThere;
+                                      loungeLongitude =
+                                          loungess[index].longitude;
+                                      distance = calculateDistance(
+                                          loungess[index].latitude,
+                                          lounges[index].longitude,
+                                          widget.initialPosition.latitude,
+                                          widget.initialPosition.longitude);
+                                      lounges[index].category == null
+                                          ? loading()
+                                          : lounges[index].weAreOpen == true
+                                              ? Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (_) =>
+                                                          MultiProvider(
+                                                            providers: [
+                                                              StreamProvider<
+                                                                  List<
+                                                                      Menu>>.value(
+                                                                value: DatabaseService(
+                                                                        menuId:
+                                                                            loungeId)
+                                                                    .menu,
+                                                              ),
+                                                              ChangeNotifierProvider
+                                                                  .value(
+                                                                value: Cart(),
+                                                              ),
+                                                              StreamProvider<
+                                                                  List<
+                                                                      Lounge>>.value(
+                                                                value: DatabaseService(
+                                                                        id: loungeId)
+                                                                    .loungesIsOpen,
+                                                              )
+                                                            ],
+                                                            child: Menus(
+                                                              loungeId:
+                                                                  loungeId,
+                                                              categoryItems:
+                                                                  categoryItems,
+                                                              loungeName:
+                                                                  loungeName,
+                                                              categoryList:
+                                                                  categoryList,
+                                                              userUid: userUid,
+                                                              userName:
+                                                                  userName,
+                                                              userPhone:
+                                                                  userPhone,
+                                                              userSex: userSex,
+                                                              userPic: userPic,
+                                                              orderConfirmed:
+                                                                  orderConfirmed,
+                                                              loungeLatitude:
+                                                                  loungeLatitude,
+                                                              loungeLongitude:
+                                                                  loungeLongitude,
+                                                              controllerDeliveryFee:
+                                                                  controllerDeliveryFee,
+                                                              controllerServiceCharge:
+                                                                  controllerServiceCharge,
+                                                              eatThere:
+                                                                  eatThere,
+                                                              controllerSFStartsAt:
+                                                                  controllerSFStartsAt,
+                                                              loungeMessagingToken:
+                                                                  loungess[
+                                                                          index]
+                                                                      .loungeMessagingToken,
+                                                              userMessagingToken:
+                                                                  userMessagingToken,
+                                                              controllerReferralCodeLogin:
+                                                                  controllerReferralCodeLogin,
+                                                              controllerReferralCodeOrder:
+                                                                  controllerReferralCodeOrder,
+                                                            ),
+                                                          )),
+                                                )
+                                              : loungeIsClosed();
+                                    });
+                                  },
+                                  child: loungess[index].active == true
+                                      ? LoungesListview(
+                                          lounge: loungess[index],
+                                          initialPosition:
+                                              widget.initialPosition,
+                                        )
+                                      : Container(),
+                                ),
+                              );
+                            },
+                          )
+                        : Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 20.0),
+                            child: Center(
+                              child: Text(
+                                "No Kushnas",
+                                style: TextStyle(
+                                    fontSize: 18.0,
+                                    color: Colors.grey[900],
+                                    fontWeight: FontWeight.w300),
+                              ),
+                            ),
+                          ),
+                  ),
+                  background: Container(
+                    child: Stack(
+                      children: <Widget>[
+                        Positioned(
+                          child: MultiProvider(
+                            providers: [
+                              StreamProvider<List<Orders>>.value(
+                                value: DatabaseService(userUid: userUid).orders,
+                              ),
+                            ],
+                            child: lounges == null
+                                ? Loading
+                                : MapsContainer(
+                                    userUid: userUid,
+                                    userName: userName,
+                                    userPhone: userPhone,
+                                    userPic: userPic,
+                                    userSex: userSex,
+                                    controllerDeliveryFee:
+                                        controllerDeliveryFee,
+                                    controllerServiceCharge:
+                                        controllerServiceCharge,
+                                    orderConfirmed: orderConfirmed,
+                                    lounges: lounges,
+                                    initialPosition: widget.initialPosition,
+                                    netVersion: netVersion,
+                                    documentUid: documentId,
+                                    controllerSFStartsAt: controllerSFStartsAt,
+                                    userMessagingToken: userMessagingToken,
+                                    controllerReferralCodeLogin:
+                                        controllerReferralCodeLogin,
+                                    controllerReferralCodeOrder:
+                                        controllerReferralCodeOrder,
+                                  ),
+                          ),
+                        ),
+                        Positioned(top: 50, left: -16, child: DrawerButton()),
+                        Visibility(
+                          visible: netVersion > 4,
+                          child: ForcedUpdate(),
+                        ),
+                        Visibility(
+                          visible: userSex == '' && userName != '',
+                          child: ForcedName(
+                            userUid: userUid,
+                            userName: userName,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
-              ),
-              expandableContent: Container(
-                height: MediaQuery.of(context).size.height * 0.7,
-                color: Colors.white,
-                child: loungess.isNotEmpty
-                    ? ListView.builder(
-                        itemCount: loungess.length,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.only(
-                                top: 10.0, left: 20, right: 20),
-                            child: GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  isOpen = loungess[index].weAreOpen;
-                                  categoryItems = loungess[index].category;
-                                  categoryList =
-                                      loungess[index].category.length;
-                                  loungeName = loungess[index].name;
-                                  loungeId = loungess[index].id;
-                                  loungePic = loungess[index].images;
-                                  loungeLatitude = loungess[index].latitude;
-                                  eatThere = lounges[index].eatThere;
-                                  loungeLongitude = loungess[index].longitude;
-                                  distance = calculateDistance(
-                                      loungess[index].latitude,
-                                      lounges[index].longitude,
-                                      widget.initialPosition.latitude,
-                                      widget.initialPosition.longitude);
-                                  lounges[index].category == null
-                                      ? loading()
-                                      : Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (_) => MultiProvider(
-                                                    providers: [
-                                                      StreamProvider<
-                                                          List<Menu>>.value(
-                                                        value: DatabaseService(
-                                                                menuId:
-                                                                    loungeId)
-                                                            .menu,
-                                                      ),
-                                                      ChangeNotifierProvider
-                                                          .value(
-                                                        value: Cart(),
-                                                      ),
-                                                      StreamProvider<
-                                                          List<Lounge>>.value(
-                                                        value: DatabaseService(
-                                                                id: loungeId)
-                                                            .loungesIsOpen,
-                                                      )
-                                                    ],
-                                                    child: Menus(
-                                                      loungeId: loungeId,
-                                                      categoryItems:
-                                                          categoryItems,
-                                                      loungeName: loungeName,
-                                                      categoryList:
-                                                          categoryList,
-                                                      userUid: userUid,
-                                                      userName: userName,
-                                                      userPhone: userPhone,
-                                                      userSex: userSex,
-                                                      userPic: userPic,
-                                                      orderConfirmed:
-                                                          orderConfirmed,
-                                                      loungeLatitude:
-                                                          loungeLatitude,
-                                                      loungeLongitude:
-                                                          loungeLongitude,
-                                                      controllerDeliveryFee:
-                                                          controllerDeliveryFee,
-                                                      controllerServiceCharge:
-                                                          controllerServiceCharge,
-                                                      eatThere: eatThere,
-                                                      controllerSFStartsAt:
-                                                          controllerSFStartsAt,
-                                                      loungeMessagingToken:
-                                                          loungess[index]
-                                                              .loungeMessagingToken,
-                                                      userMessagingToken:
-                                                          userMessagingToken,
-                                                      controllerReferralCodeLogin:
-                                                          controllerReferralCodeLogin,
-                                                      controllerReferralCodeOrder:
-                                                          controllerReferralCodeOrder,
-                                                    ),
-                                                  )),
-                                        );
-                                });
-                              },
-                              child: loungess[index].active == true
-                                  ? Container(
-                                      decoration: BoxDecoration(
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Colors.grey[600],
-                                            blurRadius:
-                                                1.0, //effect of softening the shadow
-                                            spreadRadius:
-                                                0.5, //effecet of extending the shadow
-                                            offset: Offset(
-                                                0.0, //horizontal
-                                                1.0 //vertical
-                                                ),
-                                          ),
-                                        ],
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(10.0),
-                                            topRight: Radius.circular(10.0),
-                                            bottomRight: Radius.circular(10.0),
-                                            bottomLeft: Radius.circular(10.0)),
-                                      ),
-                                      height: 100,
-                                      child: Stack(
-                                        children: [
-                                          Positioned(
-                                            left: 20,
-                                            bottom: 0,
-                                            top: 0,
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceEvenly,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(loungess[index].name,
-                                                    style: TextStyle(
-                                                        fontSize: 25,
-                                                        color: Colors.grey[500],
-                                                        fontWeight:
-                                                            FontWeight.w600)),
-                                                Text(
-                                                    loungess[index].weAreOpen ==
-                                                            true
-                                                        ? 'Open'
-                                                        : 'Closed',
-                                                    style: TextStyle(
-                                                        fontSize: 18,
-                                                        color: loungess[index]
-                                                                    .weAreOpen ==
-                                                                true
-                                                            ? Colors.orange[300]
-                                                            : Colors.grey[400],
-                                                        fontWeight:
-                                                            FontWeight.w600)),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ))
-                                  : Container(),
-                            ),
-                          );
-                        },
-                      )
-                    : Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                        child: Center(
-                          child: Text(
-                            "No Kushnas",
-                            style: TextStyle(
-                                fontSize: 18.0,
-                                color: Colors.grey[900],
-                                fontWeight: FontWeight.w300),
-                          ),
-                        ),
-                      ),
-              ),
-              background: Container(
-                child: Stack(
-                  children: <Widget>[
-                    Positioned(
-                      child: MultiProvider(
-                        providers: [
-                          StreamProvider<List<Orders>>.value(
-                            value: DatabaseService(userUid: userUid).orders,
-                          ),
-                        ],
-                        child: lounges == null
-                            ? Loading
-                            : MapsContainer(
-                                userUid: userUid,
-                                userName: userName,
-                                userPhone: userPhone,
-                                userPic: userPic,
-                                userSex: userSex,
-                                controllerDeliveryFee: controllerDeliveryFee,
-                                controllerServiceCharge:
-                                    controllerServiceCharge,
-                                orderConfirmed: orderConfirmed,
-                                lounges: lounges,
-                                initialPosition: widget.initialPosition,
-                                netVersion: netVersion,
-                                documentUid: documentId,
-                                controllerSFStartsAt: controllerSFStartsAt,
-                                userMessagingToken: userMessagingToken,
-                                controllerReferralCodeLogin:
-                                    controllerReferralCodeLogin,
-                                controllerReferralCodeOrder:
-                                    controllerReferralCodeOrder,
-                              ),
-                      ),
-                    ),
-                    Positioned(top: 50, left: -16, child: DrawerButton()),
-                    Visibility(
-                      visible: netVersion > 4,
-                      child: ForcedUpdate(),
-                    ),
-                    Visibility(
-                      visible: userSex == '' && userName != '',
-                      child: ForcedName(
-                        userUid: userUid,
-                        userName: userName,
-                      ),
-                    ),
-                  ],
+                Positioned(
+                  right: 0.0,
+                  left: 0.0,
+                  bottom: loungeIsClosedAnimation.value,
+                  child: LoungeClosedMessage(
+                      foodName: loungeName, opacity: 0.7, color: 600),
                 ),
-              ),
+              ],
             ),
           ),
         ],
