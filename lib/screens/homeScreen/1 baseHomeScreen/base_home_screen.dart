@@ -1,3 +1,4 @@
+//base homw screen
 import 'dart:async';
 import 'dart:math';
 import 'package:agelgil_user_end/models/Models.dart';
@@ -20,7 +21,7 @@ import 'package:agelgil_user_end/shared/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'listview_widgets/lounges_listview.dart';
+import 'lounge_listview/lounge_listview.dart';
 import 'update/forced_update.dart';
 
 class BaseHomeScreen extends StatefulWidget {
@@ -285,7 +286,8 @@ class _BaseHomeScreenState extends State<BaseHomeScreen>
                                       loungePic = loungess[index].images;
                                       loungeLatitude = loungess[index].latitude;
                                       eatThere = lounges[index].eatThere;
-                                      loungeLongitude = loungess[index].longitude;
+                                      loungeLongitude =
+                                          loungess[index].longitude;
                                       distance = calculateDistance(
                                           loungess[index].latitude,
                                           lounges[index].longitude,
@@ -297,10 +299,12 @@ class _BaseHomeScreenState extends State<BaseHomeScreen>
                                               ? Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
-                                                      builder: (_) => MultiProvider(
+                                                      builder: (_) =>
+                                                          MultiProvider(
                                                             providers: [
                                                               StreamProvider<
-                                                                  List<Menu>>.value(
+                                                                  List<
+                                                                      Menu>>.value(
                                                                 value: DatabaseService(
                                                                         menuId:
                                                                             loungeId)
@@ -319,7 +323,8 @@ class _BaseHomeScreenState extends State<BaseHomeScreen>
                                                               )
                                                             ],
                                                             child: Menus(
-                                                              loungeId: loungeId,
+                                                              loungeId:
+                                                                  loungeId,
                                                               categoryItems:
                                                                   categoryItems,
                                                               loungeName:
@@ -327,8 +332,10 @@ class _BaseHomeScreenState extends State<BaseHomeScreen>
                                                               categoryList:
                                                                   categoryList,
                                                               userUid: userUid,
-                                                              userName: userName,
-                                                              userPhone: userPhone,
+                                                              userName:
+                                                                  userName,
+                                                              userPhone:
+                                                                  userPhone,
                                                               userSex: userSex,
                                                               userPic: userPic,
                                                               orderConfirmed:
@@ -341,11 +348,13 @@ class _BaseHomeScreenState extends State<BaseHomeScreen>
                                                                   controllerDeliveryFee,
                                                               controllerServiceCharge:
                                                                   controllerServiceCharge,
-                                                              eatThere: eatThere,
+                                                              eatThere:
+                                                                  eatThere,
                                                               controllerSFStartsAt:
                                                                   controllerSFStartsAt,
                                                               loungeMessagingToken:
-                                                                  loungess[index]
+                                                                  loungess[
+                                                                          index]
                                                                       .loungeMessagingToken,
                                                               userMessagingToken:
                                                                   userMessagingToken,
@@ -362,7 +371,8 @@ class _BaseHomeScreenState extends State<BaseHomeScreen>
                                   child: loungess[index].active == true
                                       ? LoungesListview(
                                           lounge: loungess[index],
-                                          initialPosition: widget.initialPosition,
+                                          initialPosition:
+                                              widget.initialPosition,
                                         )
                                       : Container(),
                                 ),
@@ -370,7 +380,8 @@ class _BaseHomeScreenState extends State<BaseHomeScreen>
                             },
                           )
                         : Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 20.0),
                             child: Center(
                               child: Text(
                                 "No Kushnas",
@@ -400,7 +411,8 @@ class _BaseHomeScreenState extends State<BaseHomeScreen>
                                     userPhone: userPhone,
                                     userPic: userPic,
                                     userSex: userSex,
-                                    controllerDeliveryFee: controllerDeliveryFee,
+                                    controllerDeliveryFee:
+                                        controllerDeliveryFee,
                                     controllerServiceCharge:
                                         controllerServiceCharge,
                                     orderConfirmed: orderConfirmed,
@@ -418,7 +430,6 @@ class _BaseHomeScreenState extends State<BaseHomeScreen>
                           ),
                         ),
                         Positioned(top: 50, left: -16, child: DrawerButton()),
-                       
                         Visibility(
                           visible: netVersion > 4,
                           child: ForcedUpdate(),
@@ -434,13 +445,12 @@ class _BaseHomeScreenState extends State<BaseHomeScreen>
                     ),
                   ),
                 ),
-                 Positioned(
+                Positioned(
                   right: 0.0,
                   left: 0.0,
                   bottom: loungeIsClosedAnimation.value,
                   child: LoungeClosedMessage(
-                    foodName: loungeName, opacity: 0.7,color:600
-                  ),
+                      foodName: loungeName, opacity: 0.7, color: 600),
                 ),
               ],
             ),

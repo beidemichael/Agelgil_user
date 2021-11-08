@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 class LoungeClosedMessage extends StatefulWidget {
-  double opacity;
   int color;
+  double opacity;
   String foodName;
   LoungeClosedMessage({
     this.foodName,
-    this.opacity,
     this.color,
+    this.opacity,
   });
   @override
   _LoungeClosedMessageState createState() => _LoungeClosedMessageState();

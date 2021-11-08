@@ -272,7 +272,7 @@ class _LoungeDetailBlurryDialogState extends State<LoungeDetailBlurryDialog>
                 left: 0.0,
                 bottom: loungeIsClosedAnimation.value,
                 child: LoungeClosedMessage(
-                  foodName: widget.loungeName, opacity: 0.5,color:300
+                  foodName: widget.loungeName, color: 300,opacity: 0.5,
                 ),
               ),
             ],

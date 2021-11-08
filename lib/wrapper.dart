@@ -7,6 +7,7 @@ import 'package:agelgil_user_end/service/database.dart';
 import 'package:agelgil_user_end/shared/internet_connection.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
+import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 import 'package:geolocator/geolocator.dart';
 
@@ -47,10 +48,32 @@ class _WrapperState extends State<Wrapper> {
   }
 
   void _getUserLocation() async {
-    Position position =
-        await getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
+    Location location = new Location();
 
-    myLocation = LatLng(position.latitude, position.longitude);
+    bool _serviceEnabled;
+    PermissionStatus _permissionGranted;
+    LocationData _locationData;
+
+    _serviceEnabled = await location.serviceEnabled();
+    if (!_serviceEnabled) {
+      _serviceEnabled = await location.requestService();
+      if (!_serviceEnabled) {
+        return;
+      }
+    }
+
+    _permissionGranted = await location.hasPermission();
+    if (_permissionGranted == PermissionStatus.denied) {
+      _permissionGranted = await location.requestPermission();
+      if (_permissionGranted != PermissionStatus.granted) {
+        return;
+      }
+    }
+
+    _locationData = await location.getLocation();
+
+    myLocation = LatLng(_locationData.latitude, _locationData.longitude);
+
     Future.delayed(Duration(milliseconds: 300), () {
       setState(() {
         loading = false;
@@ -68,7 +91,7 @@ class _WrapperState extends State<Wrapper> {
               ? Loading()
               : Container(
                   child: user == null
-                      ?  SignIn()
+                      ? SignIn()
                       : MultiProvider(
                           providers: [
                             StreamProvider<List<UserInfo>>.value(
