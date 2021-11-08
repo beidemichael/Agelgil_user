@@ -532,6 +532,7 @@ class _FinalOrderScreenState extends State<FinalOrderScreen> {
                               Navigator.of(context).pop();
                               widget.orderConfirmed(
                                   widget.userUid, widget.orderNumber);
+                                   DateTime startDate = await NTP.now();
                               GeoFirePoint myLocation = geo.point(
                                   latitude: widget.loungeLatitude,
                                   longitude: widget.loungeLongitude);

@@ -8,6 +8,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
 class OrderConfirmedBlurDialog extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     final orderComfirmed = Provider.of<List<ConfirmOrder>>(context) ?? [];
@@ -34,69 +35,28 @@ class OrderConfirmedBlurDialog extends StatelessWidget {
                         Center(
                           child: Column(
                             children: [
-                              orderComfirmed == null
-                                  ? Container(
-                                      
-                                      height: 200,
-                                      decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.only(
-                                      topRight: Radius.circular(30.0),
-                                      topLeft: Radius.circular(30.0),
-                                    ),
-                                    color: Colors.white,
-                                  ),
-                                      child: Center(
-                                          child: SpinKitCircle(
-                                        color: Colors.orange,
-                                        size: 50.0,
-                                      )),
-                                    ):orderComfirmed.length == 0
-                                  ? Container(
-                                      
-                                      height: 200,
-                                      decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.only(
-                                      topRight: Radius.circular(30.0),
-                                      topLeft: Radius.circular(30.0),
-                                    ),
-                                    color: Colors.white,
-                                  ),
-                                      child: Center(
-                                          child: SpinKitCircle(
-                                        color: Colors.orange,
-                                        size: 50.0,
-                                      )),
-                                    )
-                                  : orderComfirmed.length == 0
-                                      ? Container(
-                                          color: Colors.white,
-                                          height: 200,
-                                          child: Center(
-                                              child: SpinKitCircle(
-                                            color: Colors.orange,
-                                            size: 50.0,
-                                          )),
-                                        )
-                                      : Container(
+                              orderComfirmed != null &&
+                                      orderComfirmed.length != 0
+                                  ? Column(
+                                    children: [
+                                      Container(
                                           height: 200,
                                           // color: Colors.red,
                                           child: Center(
                                             child: Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 2.0),
+                                              padding: const EdgeInsets.symmetric(
+                                                  horizontal: 2.0),
                                               child: Text(
                                                 "Your order has been placed.",
                                                 style: TextStyle(
                                                     fontSize: 18.0,
                                                     color: Colors.grey[700],
-                                                    fontWeight:
-                                                        FontWeight.w300),
+                                                    fontWeight: FontWeight.w300),
                                               ),
                                             ),
                                           ),
                                         ),
-                              InkWell(
+                                        InkWell(
                                 onTap: () {
                                   Navigator.of(context).pop();
                                 },
@@ -120,7 +80,27 @@ class OrderConfirmedBlurDialog extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                              ),
+                              )
+                                    ],
+                                  )
+                                  : Container(
+                                      height: 265,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.only(
+                                          topRight: Radius.circular(30.0),
+                                          topLeft: Radius.circular(30.0),
+                                           bottomRight: Radius.circular(30.0),
+                                          bottomLeft: Radius.circular(30.0),
+                                        ),
+                                        color: Colors.white,
+                                      ),
+                                      child: Center(
+                                          child: SpinKitCircle(
+                                        color: Colors.orange,
+                                        size: 50.0,
+                                      )),
+                                    ),
+                              
                             ],
                           ),
                         ),

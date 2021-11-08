@@ -326,7 +326,11 @@ class DatabaseService {
       'loungeMessagingToken': loungeMessagingToken,
       'userMessagingToken': userMessagingToken,
       'referralCode': referralCode
-    });
+    }).then((result) {
+   
+   print("Success!");
+
+ });
   }
 
   Future updateOrderByUser() async {
